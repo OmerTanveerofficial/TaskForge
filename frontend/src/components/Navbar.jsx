@@ -12,11 +12,15 @@ export default function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false)
 
   return (
-    <nav className="bg-surface-light/80 backdrop-blur-md border-b border-surface-lighter sticky top-0 z-50">
+    <nav className="glass-strong sticky top-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="flex items-center justify-between h-16">
           <Link to="/" className="flex items-center gap-2 text-xl font-bold text-white no-underline">
-            <span className="text-2xl">&#9881;</span>
+            <svg className="w-7 h-7 text-primary-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
+              <circle cx="12" cy="12" r="9" />
+              <circle cx="12" cy="12" r="3" />
+              <path strokeLinecap="round" d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12" />
+            </svg>
             <span className="bg-gradient-to-r from-primary-light to-accent bg-clip-text text-transparent">
               TaskForge
             </span>

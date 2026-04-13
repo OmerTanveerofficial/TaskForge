@@ -32,7 +32,10 @@ export default function Workers() {
   }
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-6">
+    <div className="relative max-w-6xl mx-auto px-4 py-8">
+      <div className="glow-blob glow-blob-1" />
+      <div className="glow-blob glow-blob-2" />
+
       <div className="text-center mb-8">
         <h1 className="text-3xl font-bold text-white mb-2">Worker Pool</h1>
         <p className="text-gray-400">Monitor worker status, task distribution, and performance</p>
@@ -41,19 +44,19 @@ export default function Workers() {
       {/* Summary */}
       {stats && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-5 text-center">
+          <div className="glass rounded-3xl p-6 text-center">
             <div className="text-3xl font-bold text-white">{stats.total_workers}</div>
             <div className="text-sm text-gray-500 mt-1">Total Workers</div>
           </div>
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-5 text-center">
+          <div className="glass rounded-3xl p-6 text-center">
             <div className="text-3xl font-bold text-green-400">{stats.idle_workers}</div>
             <div className="text-sm text-gray-500 mt-1">Idle</div>
           </div>
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-5 text-center">
+          <div className="glass rounded-3xl p-6 text-center">
             <div className="text-3xl font-bold text-yellow-400">{stats.busy_workers}</div>
             <div className="text-sm text-gray-500 mt-1">Busy</div>
           </div>
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-5 text-center">
+          <div className="glass rounded-3xl p-6 text-center">
             <div className="text-3xl font-bold text-cyan-400">{stats.avg_processing_time}s</div>
             <div className="text-sm text-gray-500 mt-1">Avg Time</div>
           </div>
@@ -61,11 +64,11 @@ export default function Workers() {
       )}
 
       {/* Worker Cards */}
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="grid md:grid-cols-2 gap-8">
         {workers.map(worker => {
           const utilization = getUtilization(worker)
           return (
-            <div key={worker.id} className="bg-surface-light rounded-2xl border border-surface-lighter p-6">
+            <div key={worker.id} className="glass card-hover rounded-3xl p-8">
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center gap-3">
                   <div className={`w-3 h-3 rounded-full ${worker.status === 'busy' ? 'bg-yellow-400 animate-pulse' : 'bg-green-500'}`} />
@@ -79,22 +82,22 @@ export default function Workers() {
               </div>
 
               {worker.current_task && (
-                <div className="mb-4 px-3 py-2 bg-surface rounded-lg border border-yellow-500/30">
+                <div className="mb-4 px-3 py-2 bg-white/5 rounded-lg border border-yellow-500/30">
                   <span className="text-xs text-yellow-400">Processing: </span>
                   <span className="text-xs text-white font-mono">{worker.current_task}</span>
                 </div>
               )}
 
               <div className="grid grid-cols-3 gap-4 mb-4">
-                <div className="text-center p-2 bg-surface rounded-lg">
+                <div className="text-center p-2 bg-white/5 rounded-xl">
                   <div className="text-lg font-bold text-green-400">{worker.tasks_completed}</div>
                   <div className="text-xs text-gray-500">Completed</div>
                 </div>
-                <div className="text-center p-2 bg-surface rounded-lg">
+                <div className="text-center p-2 bg-white/5 rounded-xl">
                   <div className="text-lg font-bold text-red-400">{worker.tasks_failed}</div>
                   <div className="text-xs text-gray-500">Failed</div>
                 </div>
-                <div className="text-center p-2 bg-surface rounded-lg">
+                <div className="text-center p-2 bg-white/5 rounded-xl">
                   <div className="text-lg font-bold text-cyan-400">{worker.total_processing_time}s</div>
                   <div className="text-xs text-gray-500">Total Time</div>
                 </div>
@@ -106,7 +109,7 @@ export default function Workers() {
                   <span>Utilization</span>
                   <span>{utilization}%</span>
                 </div>
-                <div className="w-full bg-surface rounded-full h-2">
+                <div className="w-full bg-white/5 rounded-full h-2">
                   <div
                     className="bg-gradient-to-r from-primary to-primary-light rounded-full h-2 transition-all"
                     style={{ width: `${utilization}%` }}

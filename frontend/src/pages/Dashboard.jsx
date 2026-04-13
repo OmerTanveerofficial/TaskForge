@@ -105,10 +105,13 @@ export default function Dashboard() {
   }
 
   return (
-    <div className="max-w-7xl mx-auto px-4 py-6">
+    <div className="relative max-w-7xl mx-auto px-4 py-8">
+      <div className="glow-blob glow-blob-1" />
+      <div className="glow-blob glow-blob-2" />
+
       {/* Stats */}
       {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
           {[
             { label: 'Total', value: stats.total_tasks, color: 'text-white' },
             { label: 'Completed', value: stats.completed, color: 'text-green-400' },
@@ -116,7 +119,7 @@ export default function Dashboard() {
             { label: 'Queued', value: stats.queued, color: 'text-blue-400' },
             { label: 'Failed', value: stats.failed, color: 'text-red-400' },
           ].map(s => (
-            <div key={s.label} className="bg-surface-light rounded-xl border border-surface-lighter p-4 text-center">
+            <div key={s.label} className="glass rounded-3xl p-4 text-center">
               <div className={`text-2xl font-bold ${s.color}`}>{s.value}</div>
               <div className="text-xs text-gray-500 mt-1">{s.label}</div>
             </div>
@@ -126,20 +129,20 @@ export default function Dashboard() {
 
       {/* Metrics Row */}
       {stats && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-4 text-center">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+          <div className="glass rounded-3xl p-4 text-center">
             <div className="text-xl font-bold text-cyan-400">{stats.avg_processing_time}s</div>
             <div className="text-xs text-gray-500 mt-1">Avg Processing</div>
           </div>
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-4 text-center">
+          <div className="glass rounded-3xl p-4 text-center">
             <div className="text-xl font-bold text-purple-400">{stats.throughput}/s</div>
             <div className="text-xs text-gray-500 mt-1">Throughput</div>
           </div>
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-4 text-center">
+          <div className="glass rounded-3xl p-4 text-center">
             <div className="text-xl font-bold text-green-400">{stats.success_rate}%</div>
             <div className="text-xs text-gray-500 mt-1">Success Rate</div>
           </div>
-          <div className="bg-surface-light rounded-xl border border-surface-lighter p-4 text-center">
+          <div className="glass rounded-3xl p-4 text-center">
             <div className="text-xl font-bold text-orange-400">{stats.busy_workers}/{stats.total_workers}</div>
             <div className="text-xs text-gray-500 mt-1">Workers Busy</div>
           </div>
@@ -147,30 +150,30 @@ export default function Dashboard() {
       )}
 
       {/* Controls */}
-      <div className="bg-surface-light rounded-2xl border border-surface-lighter p-6 mb-6">
+      <div className="glass rounded-3xl p-8 mb-8">
         <div className="flex flex-wrap items-center gap-4">
           <select value={taskType} onChange={e => setTaskType(e.target.value)}
-            className="bg-surface-lighter text-white px-4 py-2 rounded-lg border border-surface-lighter focus:border-primary outline-none">
+            className="bg-white/5 text-white px-4 py-2 rounded-xl border border-white/10 focus:border-primary outline-none">
             {TASK_TYPES.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
           </select>
 
           <select value={priority} onChange={e => setPriority(e.target.value)}
-            className="bg-surface-lighter text-white px-4 py-2 rounded-lg border border-surface-lighter focus:border-primary outline-none">
+            className="bg-white/5 text-white px-4 py-2 rounded-xl border border-white/10 focus:border-primary outline-none">
             {PRIORITIES.map(p => <option key={p} value={p}>{p}</option>)}
           </select>
 
           <button onClick={submitTask} disabled={loading || !backendOnline}
-            className="px-6 py-2 bg-gradient-to-r from-primary to-primary-dark text-white rounded-lg font-medium hover:shadow-lg hover:shadow-primary/25 transition-all disabled:opacity-50">
+            className="btn-glow px-6 py-2 bg-gradient-to-r from-primary to-primary-dark text-white rounded-xl font-medium hover:shadow-lg hover:shadow-primary/25 transition-all disabled:opacity-50">
             Submit Task
           </button>
 
           <button onClick={submitBatch} disabled={loading || !backendOnline}
-            className="px-6 py-2 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white rounded-lg font-medium hover:shadow-lg transition-all disabled:opacity-50">
+            className="btn-glow px-6 py-2 bg-gradient-to-r from-cyan-600 to-cyan-700 text-white rounded-xl font-medium hover:shadow-lg transition-all disabled:opacity-50">
             Submit Batch (8)
           </button>
 
           <button onClick={clearCompleted}
-            className="px-6 py-2 border border-surface-lighter text-gray-300 rounded-lg font-medium hover:bg-surface-lighter/50 transition-all ml-auto">
+            className="glass px-6 py-2 border border-white/10 text-gray-300 rounded-xl font-medium hover:bg-white/5 transition-all ml-auto">
             Clear Done
           </button>
 
@@ -179,8 +182,8 @@ export default function Dashboard() {
       </div>
 
       {/* Task List */}
-      <div className="bg-surface-light rounded-2xl border border-surface-lighter overflow-hidden">
-        <div className="px-6 py-4 border-b border-surface-lighter flex items-center justify-between">
+      <div className="glass rounded-3xl overflow-hidden">
+        <div className="px-8 py-4 border-b border-white/5 flex items-center justify-between">
           <h2 className="text-lg font-semibold text-white">Tasks</h2>
           <span className="text-sm text-gray-500">{tasks.length} total</span>
         </div>
@@ -188,9 +191,9 @@ export default function Dashboard() {
         {tasks.length === 0 ? (
           <div className="p-12 text-center text-gray-500">No tasks yet. Submit a task to get started.</div>
         ) : (
-          <div className="divide-y divide-surface-lighter max-h-[500px] overflow-y-auto">
+          <div className="divide-y divide-white/5 max-h-[500px] overflow-y-auto">
             {tasks.map(task => (
-              <div key={task.id} className="px-6 py-3 flex items-center gap-4 hover:bg-surface-lighter/30 transition-colors">
+              <div key={task.id} className="px-8 py-3 flex items-center gap-4 hover:bg-white/5 transition-colors">
                 <div className="w-24">
                   <span className="text-xs font-mono text-gray-400">{task.id}</span>
                 </div>
