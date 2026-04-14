@@ -10,25 +10,37 @@ The UI ships with a light/dark theme toggle in the navbar. Both are captured bel
 
 ### Landing page
 
-| Dark | Light |
-|------|-------|
-| ![Home — dark](screenshots/home-dark.png) | ![Home — light](screenshots/home-light.png) |
+**Dark**
+
+![Home — dark](docs/01-home-dark.png)
+
+**Light**
+
+![Home — light](docs/01-home-light.png)
 
 Includes a working `curl` example for `POST /api/tasks`, a summary of capabilities, and the per-task lifecycle.
 
 ### Dashboard
 
-| Dark | Light |
-|------|-------|
-| ![Dashboard — dark](screenshots/dashboard-dark.png) | ![Dashboard — light](screenshots/dashboard-light.png) |
+**Dark**
+
+![Dashboard — dark](docs/02-dashboard-dark.png)
+
+**Light**
+
+![Dashboard — light](docs/02-dashboard-light.png)
 
 Live stats (`total`, `completed`, `running`, `queued`, `failed`), performance metrics (`avg processing`, `throughput`, `success rate`, `workers busy`), a submit form, and a task list with click-to-copy IDs.
 
 ### Workers
 
-| Dark | Light |
-|------|-------|
-| ![Workers — dark](screenshots/workers-dark.png) | ![Workers — light](screenshots/workers-light.png) |
+**Dark**
+
+![Workers — dark](docs/03-workers-dark.png)
+
+**Light**
+
+![Workers — light](docs/03-workers-light.png)
 
 Per-worker status, currently processing task (click to copy), task counts, and utilization bar.
 
