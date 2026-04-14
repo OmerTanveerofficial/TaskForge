@@ -6,14 +6,31 @@ A multi-worker distributed task processing system with priority queuing, fault t
 
 ## Screenshots
 
-### Landing Page
-![Home](screenshots/home.png)
+The UI ships with a light/dark theme toggle in the navbar. Both are captured below at 1440px.
 
-### Task Dashboard
-![Dashboard](screenshots/dashboard.png)
+### Landing page
 
-### Worker Pool Monitor
-![Workers](screenshots/workers.png)
+| Dark | Light |
+|------|-------|
+| ![Home — dark](screenshots/home-dark.png) | ![Home — light](screenshots/home-light.png) |
+
+Includes a working `curl` example for `POST /api/tasks`, a summary of capabilities, and the per-task lifecycle.
+
+### Dashboard
+
+| Dark | Light |
+|------|-------|
+| ![Dashboard — dark](screenshots/dashboard-dark.png) | ![Dashboard — light](screenshots/dashboard-light.png) |
+
+Live stats (`total`, `completed`, `running`, `queued`, `failed`), performance metrics (`avg processing`, `throughput`, `success rate`, `workers busy`), a submit form, and a task list with click-to-copy IDs.
+
+### Workers
+
+| Dark | Light |
+|------|-------|
+| ![Workers — dark](screenshots/workers-dark.png) | ![Workers — light](screenshots/workers-light.png) |
+
+Per-worker status, currently processing task (click to copy), task counts, and utilization bar.
 
 ## Features
 
