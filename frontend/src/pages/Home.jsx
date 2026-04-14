@@ -1,146 +1,106 @@
 import { Link } from 'react-router-dom'
-import { motion } from 'framer-motion'
 
-const GearIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <circle cx="12" cy="12" r="9" />
-    <circle cx="12" cy="12" r="3" />
-    <path strokeLinecap="round" d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12" />
-  </svg>
-)
+const curlSnippet = `curl -X POST http://localhost:5000/api/tasks \\
+  -H "Content-Type: application/json" \\
+  -d '{
+    "type": "compute_fibonacci",
+    "params": { "n": 30 },
+    "priority": "HIGH"
+  }'`
 
-const NetworkIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <circle cx="12" cy="5" r="3" />
-    <circle cx="5" cy="19" r="3" />
-    <circle cx="19" cy="19" r="3" />
-    <path strokeLinecap="round" d="M12 8v3M9.5 13.5L6.5 16.5M14.5 13.5l3 3" />
-  </svg>
-)
-
-const RefreshIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M1 4v6h6M23 20v-6h-6" />
-    <path strokeLinecap="round" d="M20.49 9A9 9 0 005.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 013.51 15" />
-  </svg>
-)
-
-const LightningIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" />
-  </svg>
-)
-
-const ChartIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <rect x="3" y="12" width="4" height="9" rx="1" strokeLinejoin="round" />
-    <rect x="10" y="6" width="4" height="15" rx="1" strokeLinejoin="round" />
-    <rect x="17" y="3" width="4" height="18" rx="1" strokeLinejoin="round" />
-  </svg>
-)
-
-const PackageIcon = () => (
-  <svg className="w-8 h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 8l-9-5-9 5v8l9 5 9-5V8z" />
-    <path strokeLinecap="round" d="M3 8l9 5 9-5M12 13v8" />
-  </svg>
-)
-
-const HeroGearIcon = () => (
-  <svg className="w-16 h-16 text-primary-light" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={1.5}>
-    <circle cx="12" cy="12" r="9" />
-    <circle cx="12" cy="12" r="3" />
-    <path strokeLinecap="round" d="M12 3v3M12 18v3M3 12h3M18 12h3M5.64 5.64l2.12 2.12M16.24 16.24l2.12 2.12M5.64 18.36l2.12-2.12M16.24 7.76l2.12-2.12" />
-  </svg>
-)
-
-const featureIcons = [GearIcon, NetworkIcon, RefreshIcon, LightningIcon, ChartIcon, PackageIcon]
-
-const features = [
-  { title: 'Priority Queue', description: 'Tasks are processed based on priority levels: Critical, High, Normal, Low. Higher priority tasks are always dequeued first.' },
-  { title: 'Multi-Worker Pool', description: '4 concurrent worker threads process tasks in parallel, simulating a distributed computing environment.' },
-  { title: 'Auto Retry & Fault Tolerance', description: 'Failed tasks automatically retry up to 3 times with status tracking. Simulated 10% failure rate for testing.' },
-  { title: 'Real-Time Dashboard', description: 'Live monitoring of task progress, worker status, throughput, and success rates.' },
-  { title: 'Task Analytics', description: 'Track processing times, success rates, throughput, and worker utilization metrics.' },
-  { title: 'Batch Processing', description: 'Submit multiple tasks at once for parallel processing across the worker pool.' },
+const capabilities = [
+  { k: 'priority',  v: 'Critical > High > Normal > Low, strict ordering' },
+  { k: 'workers',   v: '4 concurrent workers, parallel execution' },
+  { k: 'retries',   v: 'Up to 3 attempts with exponential backoff' },
+  { k: 'telemetry', v: 'Live throughput, success rate, utilization' },
+  { k: 'batching',  v: 'Submit up to N tasks in a single request' },
 ]
 
-const architecture = [
-  { step: '1', title: 'Client submits task via REST API', desc: 'Tasks include type, parameters, and priority level.' },
-  { step: '2', title: 'Master enqueues to priority queue', desc: 'Tasks are sorted by priority (Critical > High > Normal > Low).' },
-  { step: '3', title: 'Workers dequeue and execute', desc: 'Idle workers pick the highest-priority task from the queue.' },
-  { step: '4', title: 'Results returned with metrics', desc: 'Processing time, retries, and results are tracked per task.' },
-  { step: '5', title: 'Failed tasks auto-retry', desc: 'Up to 3 retries with exponential backoff before marking as failed.' },
+const lifecycle = [
+  { step: '01', title: 'POST /api/tasks', desc: 'Client submits with type, params, and priority.' },
+  { step: '02', title: 'Enqueue to priority heap', desc: 'Tasks sorted — higher priority always dequeued first.' },
+  { step: '03', title: 'Worker picks up task', desc: 'Idle worker dequeues and begins execution.' },
+  { step: '04', title: 'Record metrics', desc: 'Processing time, retries, result persisted on the task record.' },
+  { step: '05', title: 'Retry on failure', desc: 'Up to 3 retries before the task is marked failed.' },
 ]
 
 export default function Home() {
   return (
-    <div className="min-h-screen relative">
-      <div className="glow-blob glow-blob-1" />
-      <div className="glow-blob glow-blob-2" />
-
-      <section className="relative overflow-hidden py-24 px-4">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-accent/10" />
-        <div className="relative max-w-4xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.6 }}>
-            <div className="flex justify-center mb-8">
-              <HeroGearIcon />
-            </div>
-            <h1 className="text-5xl md:text-7xl font-bold mb-8">
-              <span className="gradient-text">TaskForge</span>
-            </h1>
-            <p className="text-xl md:text-2xl text-gray-400 mb-4">Distributed Task Queue System</p>
-            <p className="text-gray-500 mb-10 max-w-xl mx-auto">
-              A multi-worker distributed task processing system with priority queuing,
-              fault tolerance, automatic retries, and real-time monitoring dashboard.
-            </p>
-            <div className="flex gap-4 justify-center flex-wrap">
-              <Link to="/dashboard" className="btn-glow px-8 py-3 bg-gradient-to-r from-primary to-primary-dark rounded-xl text-white font-semibold hover:shadow-lg hover:shadow-primary/25 transition-all no-underline">
-                Open Dashboard
-              </Link>
-              <Link to="/workers" className="glass px-8 py-3 border border-white/10 rounded-xl text-gray-300 font-semibold hover:bg-white/5 transition-all no-underline">
-                View Workers
-              </Link>
-            </div>
-          </motion.div>
+    <div className="max-w-5xl mx-auto px-4 sm:px-6">
+      <section className="pt-16 md:pt-24 pb-14">
+        <p className="eyebrow mb-4">Task queue · v1.0</p>
+        <h1 className="text-3xl md:text-5xl font-semibold tracking-tight text-fg mb-4 max-w-2xl leading-tight">
+          A small, boring task queue — with the parts you actually want.
+        </h1>
+        <p className="text-muted text-base md:text-lg max-w-2xl mb-8 leading-relaxed">
+          Priorities, retries, a worker pool, and a live dashboard. Nothing more.
+          Submit work over HTTP, watch it run.
+        </p>
+        <div className="flex flex-wrap items-center gap-3">
+          <Link to="/dashboard" className="btn-primary no-underline">
+            Open dashboard
+          </Link>
+          <Link to="/workers" className="btn-secondary no-underline">
+            Workers
+          </Link>
+          <span className="text-subtle text-xs font-mono ml-1 hidden sm:inline">
+            ↳ or <code className="text-muted">POST /api/tasks</code>
+          </span>
         </div>
       </section>
 
-      <section className="py-20 px-4 max-w-6xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-12">Features</h2>
-        <div className="grid md:grid-cols-3 gap-8">
-          {features.map((f, i) => {
-            const IconComponent = featureIcons[i]
-            return (
-              <motion.div key={f.title} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
-                className="glass card-hover p-8 rounded-3xl">
-                <div className="text-primary-light mb-4"><IconComponent /></div>
-                <h3 className="text-lg font-semibold text-white mb-2">{f.title}</h3>
-                <p className="text-gray-400 text-sm">{f.description}</p>
-              </motion.div>
-            )
-          })}
+      <section className="pb-16 grid md:grid-cols-[1.1fr_1fr] gap-6">
+        <div className="panel overflow-hidden flex flex-col">
+          <div className="flex items-center justify-between px-4 h-9 border-b border-border bg-bg/60">
+            <div className="flex items-center gap-1.5">
+              <span className="w-2.5 h-2.5 rounded-full bg-border-strong" />
+              <span className="w-2.5 h-2.5 rounded-full bg-border-strong" />
+              <span className="w-2.5 h-2.5 rounded-full bg-border-strong" />
+            </div>
+            <span className="eyebrow">submit a task</span>
+          </div>
+          <pre className="flex-1 p-5 font-mono text-[12.5px] leading-relaxed text-fg overflow-x-auto">
+<span className="text-subtle"># POST a task with HIGH priority</span>
+{'\n'}{curlSnippet}
+          </pre>
         </div>
-      </section>
 
-      <section className="py-20 px-4 max-w-4xl mx-auto">
-        <h2 className="text-3xl font-bold text-center text-white mb-12">Architecture</h2>
-        <div className="space-y-4">
-          {architecture.map((item, i) => (
-            <motion.div key={item.step} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: i * 0.1 }}
-              className="glass flex gap-4 items-start p-4 rounded-xl">
-              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center text-primary-light font-bold shrink-0">{item.step}</div>
-              <div>
-                <h3 className="text-white font-semibold mb-1">{item.title}</h3>
-                <p className="text-gray-400 text-sm">{item.desc}</p>
+        <div className="panel p-5">
+          <div className="eyebrow mb-4">what's inside</div>
+          <dl className="space-y-3">
+            {capabilities.map(c => (
+              <div key={c.k} className="flex gap-4 text-sm">
+                <dt className="font-mono text-xs text-accent w-20 shrink-0 pt-0.5 uppercase tracking-wider">
+                  {c.k}
+                </dt>
+                <dd className="text-muted leading-relaxed">{c.v}</dd>
               </div>
-            </motion.div>
+            ))}
+          </dl>
+        </div>
+      </section>
+
+      <section className="pb-16">
+        <div className="flex items-baseline justify-between mb-5">
+          <h2 className="text-lg font-semibold tracking-tight text-fg">Lifecycle</h2>
+          <span className="eyebrow">per task</span>
+        </div>
+        <div className="panel divide-y divide-border">
+          {lifecycle.map(item => (
+            <div key={item.step} className="flex gap-5 items-start px-5 py-4">
+              <span className="font-mono text-sm text-accent w-7 shrink-0 tabular-nums">{item.step}</span>
+              <div className="flex-1 min-w-0">
+                <h3 className="text-fg font-medium text-sm">{item.title}</h3>
+                <p className="text-muted text-sm mt-0.5 leading-relaxed">{item.desc}</p>
+              </div>
+            </div>
           ))}
         </div>
       </section>
 
-      <footer className="py-8 px-4 border-t border-white/5 text-center text-gray-500 text-sm">
-        <p>TaskForge - Distributed task processing with fault tolerance</p>
+      <footer className="pb-10 pt-6 border-t border-border flex items-center justify-between text-xs font-mono text-subtle">
+        <span>TaskForge</span>
+        <span>built for learning · Flask · React</span>
       </footer>
     </div>
   )

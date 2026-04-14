@@ -6,7 +6,7 @@ import Workers from './pages/Workers'
 
 function App() {
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-bg text-fg">
       <Navbar />
       <Routes>
         <Route path="/" element={<Home />} />
