@@ -1,25 +1,23 @@
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
+import { useLocalStorage } from './useLocalStorage'
 
 const STORAGE_KEY = 'taskforge-theme'
 
-function getInitial() {
+function systemPreference() {
   if (typeof window === 'undefined') return 'dark'
-  const stored = localStorage.getItem(STORAGE_KEY)
-  if (stored === 'light' || stored === 'dark') return stored
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark'
 }
 
 export function useTheme() {
-  const [theme, setTheme] = useState(getInitial)
+  const [theme, setTheme] = useLocalStorage(STORAGE_KEY, systemPreference())
 
   useEffect(() => {
     const root = document.documentElement
     root.classList.remove('light', 'dark')
-    root.classList.add(theme)
-    localStorage.setItem(STORAGE_KEY, theme)
+    root.classList.add(theme === 'light' ? 'light' : 'dark')
   }, [theme])
 
   const toggle = () => setTheme(t => (t === 'dark' ? 'light' : 'dark'))
 
-  return { theme, toggle }
+  return { theme, toggle, setTheme }
 }
