@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect, useCallback, useMemo } from 'react'
 import { Stat, StatGrid } from '../components/ui/StatGrid'
 import { StatusPill } from '../components/ui/StatusPill'
 import { CopyableId } from '../components/ui/CopyableId'
 import { Spinner } from '../components/ui/Spinner'
+import { useDebounce } from '../hooks/useDebounce'
 
 const API = '/api'
 
@@ -33,6 +34,8 @@ export default function Dashboard() {
   const [priority, setPriority] = useState('NORMAL')
   const [loading, setLoading] = useState(false)
   const [backendOnline, setBackendOnline] = useState(null)
+  const [query, setQuery] = useState('')
+  const debouncedQuery = useDebounce(query, 180)
 
   const fetchData = useCallback(async () => {
     try {
@@ -102,6 +105,16 @@ export default function Dashboard() {
     backendOnline === null ? 'connecting' :
     backendOnline ? 'api online' : 'api offline'
 
+  const visibleTasks = useMemo(() => {
+    const q = debouncedQuery.trim().toLowerCase()
+    if (!q) return tasks
+    return tasks.filter(t =>
+      t.id.toLowerCase().includes(q) ||
+      (t.type_info?.name || t.type || '').toLowerCase().includes(q) ||
+      (t.type_info?.category || '').toLowerCase().includes(q)
+    )
+  }, [tasks, debouncedQuery])
+
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <div className="flex items-end justify-between mb-8 flex-wrap gap-4">
@@ -166,11 +179,20 @@ export default function Dashboard() {
       </div>
 
       <div className="panel overflow-hidden">
-        <div className="px-5 h-11 border-b border-border flex items-center justify-between">
+        <div className="px-5 h-11 border-b border-border flex items-center justify-between gap-3">
           <h2 className="text-sm font-semibold text-fg">Tasks</h2>
-          <span className="text-xs font-mono text-muted flex items-center gap-2">
+          <input
+            type="search"
+            value={query}
+            onChange={e => setQuery(e.target.value)}
+            placeholder="filter id / type…"
+            className="input font-mono text-xs flex-1 max-w-60"
+          />
+          <span className="text-xs font-mono text-muted flex items-center gap-2 shrink-0">
             {backendOnline === null && <Spinner size="sm" />}
-            {tasks.length} <span className="text-subtle">total</span>
+            {visibleTasks.length}
+            {debouncedQuery && <span className="text-subtle">/ {tasks.length}</span>}
+            {!debouncedQuery && <span className="text-subtle">total</span>}
           </span>
         </div>
 
@@ -181,9 +203,13 @@ export default function Dashboard() {
               submit one above or <code className="text-muted">POST /api/tasks</code>
             </p>
           </div>
+        ) : visibleTasks.length === 0 ? (
+          <div className="px-5 py-16 text-center">
+            <p className="text-muted text-sm">No tasks match that filter.</p>
+          </div>
         ) : (
           <ul className="divide-y divide-border max-h-[560px] overflow-y-auto">
-            {tasks.map(task => (
+            {visibleTasks.map(task => (
               <li key={task.id} className="px-5 py-3 flex items-center gap-4 hover:bg-bg/60 transition-colors">
                 <div className="w-24 shrink-0">
                   <CopyableId id={task.id} />
