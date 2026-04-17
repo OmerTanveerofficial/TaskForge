@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Stat, StatGrid } from '../components/ui/StatGrid'
 import { StatusPill } from '../components/ui/StatusPill'
 import { CopyableId } from '../components/ui/CopyableId'
+import { Spinner } from '../components/ui/Spinner'
 
 const API = '/api'
 
@@ -151,7 +152,8 @@ export default function Dashboard() {
 
           <div className="flex-1" />
 
-          <button onClick={submitTask} disabled={loading || !backendOnline} className="btn-primary">
+          <button onClick={submitTask} disabled={loading || !backendOnline} className="btn-primary inline-flex items-center gap-2">
+            {loading ? <Spinner size="sm" /> : null}
             Submit
           </button>
           <button onClick={submitBatch} disabled={loading || !backendOnline} className="btn-secondary">
@@ -166,7 +168,8 @@ export default function Dashboard() {
       <div className="panel overflow-hidden">
         <div className="px-5 h-11 border-b border-border flex items-center justify-between">
           <h2 className="text-sm font-semibold text-fg">Tasks</h2>
-          <span className="text-xs font-mono text-muted">
+          <span className="text-xs font-mono text-muted flex items-center gap-2">
+            {backendOnline === null && <Spinner size="sm" />}
             {tasks.length} <span className="text-subtle">total</span>
           </span>
         </div>
