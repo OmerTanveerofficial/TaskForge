@@ -2,6 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Stat, StatGrid } from '../components/ui/StatGrid'
 import { StatusPill } from '../components/ui/StatusPill'
 import { CopyableId } from '../components/ui/CopyableId'
+import { EmptyState } from '../components/ui/EmptyState'
 
 const API = '/api'
 
@@ -115,9 +116,11 @@ export default function Workers() {
       </div>
 
       {workers.length === 0 ? (
-        <div className="panel p-16 text-center">
-          <p className="text-muted text-sm">No workers reporting.</p>
-          <p className="text-subtle text-xs mt-1 font-mono">start the backend to see worker status</p>
+        <div className="panel">
+          <EmptyState
+            title="No workers reporting."
+            hint="start the backend to see worker status"
+          />
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
