@@ -43,18 +43,24 @@ export default function Navbar() {
 
           <div className="hidden md:flex items-center gap-1">
             {links.map(link => {
-              const active = location.pathname === link.to
+              const active = link.to === '/'
+                ? location.pathname === '/'
+                : location.pathname === link.to || location.pathname.startsWith(`${link.to}/`)
               return (
                 <Link
                   key={link.to}
                   to={link.to}
-                  className={`px-3 py-1.5 rounded-md text-sm font-medium transition-colors no-underline ${
+                  aria-current={active ? 'page' : undefined}
+                  className={`relative px-3 py-1.5 rounded-md text-sm font-medium transition-colors no-underline ${
                     active
                       ? 'text-fg bg-panel border border-border'
-                      : 'text-muted hover:text-fg'
+                      : 'text-muted hover:text-fg border border-transparent'
                   }`}
                 >
                   {link.label}
+                  {active && (
+                    <span className="absolute -bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-accent" />
+                  )}
                 </Link>
               )
             })}
