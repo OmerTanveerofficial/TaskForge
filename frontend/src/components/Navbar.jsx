@@ -6,6 +6,7 @@ const links = [
   { to: '/', label: 'Overview' },
   { to: '/dashboard', label: 'Dashboard' },
   { to: '/workers', label: 'Workers' },
+  { to: '/settings', label: 'Settings' },
 ]
 
 function SunIcon() {
