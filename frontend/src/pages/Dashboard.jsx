@@ -4,6 +4,7 @@ import { StatusPill } from '../components/ui/StatusPill'
 import { CopyableId } from '../components/ui/CopyableId'
 import { Spinner } from '../components/ui/Spinner'
 import { useDebounce } from '../hooks/useDebounce'
+import { useToast } from '../components/ui/Toast'
 
 const API = '/api'
 
@@ -36,6 +37,7 @@ export default function Dashboard() {
   const [backendOnline, setBackendOnline] = useState(null)
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 180)
+  const toast = useToast()
 
   const fetchData = useCallback(async () => {
     try {
@@ -63,13 +65,17 @@ export default function Dashboard() {
     setLoading(true)
     const typeInfo = TASK_TYPES.find(t => t.value === taskType)
     try {
-      await fetch(`${API}/tasks`, {
+      const res = await fetch(`${API}/tasks`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ type: taskType, params: typeInfo.params, priority }),
       })
+      if (!res.ok) throw new Error(res.statusText)
+      toast.push(`Queued ${typeInfo.label.toLowerCase()} · ${priority.toLowerCase()}`, 'ok')
       fetchData()
-    } catch {}
+    } catch {
+      toast.push('Submit failed — is the backend up?', 'danger')
+    }
     setLoading(false)
   }
 
