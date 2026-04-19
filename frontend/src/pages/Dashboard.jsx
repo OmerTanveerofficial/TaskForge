@@ -103,8 +103,14 @@ export default function Dashboard() {
   }
 
   const cancelTask = async (taskId) => {
-    await fetch(`${API}/tasks/${taskId}/cancel`, { method: 'POST' })
-    fetchData()
+    try {
+      const res = await fetch(`${API}/tasks/${taskId}/cancel`, { method: 'POST' })
+      if (!res.ok) throw new Error(res.statusText)
+      toast.push(`Cancelled ${taskId}`, 'warn')
+      fetchData()
+    } catch {
+      toast.push(`Could not cancel ${taskId}`, 'danger')
+    }
   }
 
   const statusLabel =
