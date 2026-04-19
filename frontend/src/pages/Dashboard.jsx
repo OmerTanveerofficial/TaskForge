@@ -3,6 +3,7 @@ import { Stat, StatGrid } from '../components/ui/StatGrid'
 import { StatusPill } from '../components/ui/StatusPill'
 import { CopyableId } from '../components/ui/CopyableId'
 import { Spinner } from '../components/ui/Spinner'
+import { Badge } from '../components/ui/Badge'
 import { useDebounce } from '../hooks/useDebounce'
 import { useToast } from '../components/ui/Toast'
 
@@ -21,11 +22,11 @@ const TASK_TYPES = [
 
 const PRIORITIES = ['LOW', 'NORMAL', 'HIGH', 'CRITICAL']
 
-const priorityTextStyle = {
-  LOW:      'text-subtle',
-  NORMAL:   'text-info',
-  HIGH:     'text-accent',
-  CRITICAL: 'text-danger',
+const priorityTone = {
+  LOW:      'neutral',
+  NORMAL:   'info',
+  HIGH:     'accent',
+  CRITICAL: 'danger',
 }
 
 export default function Dashboard() {
@@ -242,9 +243,11 @@ export default function Dashboard() {
                   )}
                 </div>
 
-                <span className={`font-mono text-xs w-20 text-right ${priorityTextStyle[task.priority]}`}>
-                  {task.priority}
-                </span>
+                <div className="w-20 flex justify-end">
+                  <Badge tone={priorityTone[task.priority] || 'neutral'}>
+                    {task.priority}
+                  </Badge>
+                </div>
 
                 <StatusPill status={task.status} />
 
