@@ -49,11 +49,17 @@ export default function Dashboard() {
       const statsData = await statsRes.json()
       setTasks(tasksData.tasks)
       setStats(statsData)
-      setBackendOnline(true)
+      setBackendOnline(prev => {
+        if (prev === false) toast.push('Backend is back online', 'ok')
+        return true
+      })
     } catch {
-      setBackendOnline(false)
+      setBackendOnline(prev => {
+        if (prev === true) toast.push('Lost connection to backend', 'danger')
+        return false
+      })
     }
-  }, [])
+  }, [toast])
 
   useEffect(() => {
     fetchData()
