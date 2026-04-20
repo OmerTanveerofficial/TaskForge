@@ -5,6 +5,7 @@ import { CopyableId } from '../components/ui/CopyableId'
 import { Spinner } from '../components/ui/Spinner'
 import { Badge } from '../components/ui/Badge'
 import { useDebounce } from '../hooks/useDebounce'
+import { useHotkey } from '../hooks/useHotkey'
 import { useToast } from '../components/ui/Toast'
 import { formatDuration } from '../utils/format'
 
@@ -68,6 +69,11 @@ export default function Dashboard() {
     const interval = setInterval(fetchData, 2000)
     return () => clearInterval(interval)
   }, [fetchData])
+
+  useHotkey('r', () => {
+    fetchData()
+    toast.push('Refreshed', 'info')
+  })
 
   const submitTask = async () => {
     setLoading(true)
