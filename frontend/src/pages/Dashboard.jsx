@@ -6,6 +6,7 @@ import { Spinner } from '../components/ui/Spinner'
 import { Badge } from '../components/ui/Badge'
 import { useDebounce } from '../hooks/useDebounce'
 import { useHotkey } from '../hooks/useHotkey'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 import { useToast } from '../components/ui/Toast'
 import { formatDuration } from '../utils/format'
 
@@ -40,6 +41,7 @@ export default function Dashboard() {
   const [backendOnline, setBackendOnline] = useState(null)
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 180)
+  const [refreshMs] = useLocalStorage('taskforge-refresh-ms', 2000)
   const toast = useToast()
 
   const fetchData = useCallback(async () => {
@@ -66,9 +68,9 @@ export default function Dashboard() {
 
   useEffect(() => {
     fetchData()
-    const interval = setInterval(fetchData, 2000)
+    const interval = setInterval(fetchData, refreshMs)
     return () => clearInterval(interval)
-  }, [fetchData])
+  }, [fetchData, refreshMs])
 
   useHotkey('r', () => {
     fetchData()
