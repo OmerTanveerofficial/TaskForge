@@ -42,6 +42,7 @@ export default function Dashboard() {
   const [query, setQuery] = useState('')
   const debouncedQuery = useDebounce(query, 180)
   const [refreshMs] = useLocalStorage('taskforge-refresh-ms', 2000)
+  const [compactRows] = useLocalStorage('taskforge-compact', false)
   const toast = useToast()
 
   const fetchData = useCallback(async () => {
@@ -238,7 +239,7 @@ export default function Dashboard() {
         ) : (
           <ul className="divide-y divide-border max-h-[560px] overflow-y-auto">
             {visibleTasks.map(task => (
-              <li key={task.id} className="px-5 py-3 flex items-center gap-4 hover:bg-bg/60 transition-colors">
+              <li key={task.id} className={`px-5 flex items-center gap-4 hover:bg-bg/60 transition-colors ${compactRows ? 'py-1.5' : 'py-3'}`}>
                 <div className="w-24 shrink-0">
                   <CopyableId id={task.id} />
                 </div>
