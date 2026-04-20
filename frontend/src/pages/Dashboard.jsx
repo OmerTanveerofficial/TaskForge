@@ -6,6 +6,7 @@ import { Spinner } from '../components/ui/Spinner'
 import { Badge } from '../components/ui/Badge'
 import { useDebounce } from '../hooks/useDebounce'
 import { useToast } from '../components/ui/Toast'
+import { formatDuration } from '../utils/format'
 
 const API = '/api'
 
@@ -252,7 +253,7 @@ export default function Dashboard() {
                 <StatusPill status={task.status} />
 
                 <span className="w-16 text-right font-mono text-xs text-muted tabular-nums">
-                  {task.processing_time != null ? `${task.processing_time}s` : '—'}
+                  {formatDuration(task.processing_time)}
                 </span>
 
                 <span className="w-14 text-right font-mono text-xs tabular-nums">
