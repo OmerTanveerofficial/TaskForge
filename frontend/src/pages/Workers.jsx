@@ -3,6 +3,7 @@ import { Stat, StatGrid } from '../components/ui/StatGrid'
 import { StatusPill } from '../components/ui/StatusPill'
 import { CopyableId } from '../components/ui/CopyableId'
 import { EmptyState } from '../components/ui/EmptyState'
+import { useLocalStorage } from '../hooks/useLocalStorage'
 
 const API = '/api'
 
@@ -71,6 +72,7 @@ function WorkerCard({ worker, utilization }) {
 export default function Workers() {
   const [workers, setWorkers] = useState([])
   const [stats, setStats] = useState(null)
+  const [refreshMs] = useLocalStorage('taskforge-refresh-ms', 2000)
 
   const fetchData = useCallback(async () => {
     try {
@@ -87,9 +89,9 @@ export default function Workers() {
 
   useEffect(() => {
     fetchData()
-    const interval = setInterval(fetchData, 2000)
+    const interval = setInterval(fetchData, refreshMs)
     return () => clearInterval(interval)
-  }, [fetchData])
+  }, [fetchData, refreshMs])
 
   const getUtilization = (worker) => {
     if (!stats) return 0
