@@ -1,5 +1,6 @@
 import { Routes, Route } from 'react-router-dom'
 import Navbar from './components/Navbar'
+import KeyboardHelp from './components/KeyboardHelp'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import Home from './pages/Home'
 import Dashboard from './pages/Dashboard'
@@ -10,6 +11,7 @@ function App() {
   return (
     <div className="min-h-screen bg-bg text-fg">
       <Navbar />
+      <KeyboardHelp />
       <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
